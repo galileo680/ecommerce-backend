@@ -15,7 +15,7 @@ public class UserMapper {
                 .firstname(user.getFirstname())
                 .lastname(user.getLastname())
                 .phoneNumber(user.getPhoneNumber())
-                .role(user.getRole().name())
+                //.role(user.getRole().name())
                 .build();
 
         return userDto;
