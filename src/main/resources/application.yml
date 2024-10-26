@@ -2,26 +2,8 @@ spring:
   application:
     name: ecommerce
 
-  datasource:
-    url: jdbc:postgresql://localhost:5432/ecommerce
-    username: postgres
-    password: 1234
-    driver-class-name: org.postgresql.Driver
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: false
-    properties:
-      hibernate:
-        format_sql: true
-    database: postgresql
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-
-application:
-  security:
-    jwt:
-      secret-key: qeAj4qoT9JhEMlNqYLBB60e6rRw8CTXuHqlnLUKtzxXbEMc27FbV8d4m0sZaa0t8
-      expiration: 86400000
+  profiles:
+    active: dev
 
 server:
   port: 8080
