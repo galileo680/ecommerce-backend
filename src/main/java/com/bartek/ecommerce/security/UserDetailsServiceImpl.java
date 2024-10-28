@@ -1,6 +1,6 @@
 package com.bartek.ecommerce.security;
 
-import com.bartek.ecommerce.repositories.UserRepository;
+import com.bartek.ecommerce.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
