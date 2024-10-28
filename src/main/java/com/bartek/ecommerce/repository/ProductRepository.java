@@ -1,4 +1,4 @@
-package com.bartek.ecommerce.repositories;
+package com.bartek.ecommerce.repository;
 
 import com.bartek.ecommerce.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
