@@ -1,5 +1,6 @@
 package com.bartek.ecommerce.entity;
 
+import com.bartek.ecommerce.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -15,11 +16,17 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private BigDecimal totalPrice;
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY,  cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderItem> orderItemList;
 
-    @Column(name = "created_at")
-    private final LocalDateTime createdAt = LocalDateTime.now();
+    private OrderStatus status;
+    private BigDecimal totalPrice;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY,  cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItem> orderItems;
+
+    private LocalDateTime orderDate;
 
 }

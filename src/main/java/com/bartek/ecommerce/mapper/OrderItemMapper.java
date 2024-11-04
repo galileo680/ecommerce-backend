@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class OrderItemMapper {
 
-    public OrderItemDto toOrderItemDto(OrderItem orderItem) {
+    /*public OrderItemDto toOrderItemDto(OrderItem orderItem) {
         OrderItemDto orderItemDto = OrderItemDto.builder()
                 .id(orderItem.getId())
                 .quantity(orderItem.getQuantity())
@@ -17,5 +17,5 @@ public class OrderItemMapper {
                 .build();
 
         return orderItemDto;
-    }
+    }*/
 }
