@@ -65,7 +65,7 @@ public class ProductController {
         return ResponseEntity.ok(productService.updateProduct(productDto, categoryId));
     }
 
-    @DeleteMapping("/delete/{productId}")
+    @DeleteMapping("/{productId}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<HttpStatus> deleteProduct(
             @PathVariable Long productId
