@@ -7,7 +7,6 @@ import com.bartek.ecommerce.exception.NotFoundException;
 import com.bartek.ecommerce.mapper.ProductMapper;
 import com.bartek.ecommerce.repository.CategoryRepository;
 import com.bartek.ecommerce.repository.ProductRepository;
-import com.bartek.ecommerce.service.AwsS3Service;
 import com.bartek.ecommerce.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

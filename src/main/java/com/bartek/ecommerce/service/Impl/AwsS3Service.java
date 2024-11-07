@@ -1,4 +1,4 @@
-package com.bartek.ecommerce.service;
+package com.bartek.ecommerce.service.Impl;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
