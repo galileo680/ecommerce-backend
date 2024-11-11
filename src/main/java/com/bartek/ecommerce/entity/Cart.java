@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Data
@@ -22,5 +22,5 @@ public class Cart {
     private User user;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
-    private Set<CartItem> cartItems;
+    private List<CartItem> cartItems;
 }
