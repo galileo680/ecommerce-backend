@@ -28,6 +28,16 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(IllegalAccessException.class)
+    public ResponseEntity<ExceptionResponse> handleNotFoundException(IllegalAccessException ex, WebRequest request){
+        ExceptionResponse errorResponse = ExceptionResponse.builder()
+                .status(HttpStatus.FORBIDDEN.value())
+                .message(ex.getMessage())
+                .build();
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+    }
+
     @ExceptionHandler(InvalidCredentialsException.class)
     public ResponseEntity<ExceptionResponse> handleInvalidCredentialsExceptionException(InvalidCredentialsException ex, WebRequest request){
         ExceptionResponse errorResponse = ExceptionResponse.builder()
