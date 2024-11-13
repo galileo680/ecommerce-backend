@@ -1,13 +1,17 @@
 package com.bartek.ecommerce.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
 @Entity
 @Data
 @Table(name = "cart_items")
+@NoArgsConstructor
+@AllArgsConstructor
 public class CartItem {
 
     @Id
@@ -24,4 +28,5 @@ public class CartItem {
     @ManyToOne
     @JoinColumn(name = "cart_id")
     private Cart cart;
+
 }
