@@ -18,7 +18,7 @@ public class Order {
     private Long id;
 
     private OrderStatus status;
-    private BigDecimal totalPrice;
+    private BigDecimal totalAmount;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
