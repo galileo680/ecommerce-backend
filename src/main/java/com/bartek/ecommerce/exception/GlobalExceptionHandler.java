@@ -29,13 +29,23 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(IllegalAccessException.class)
-    public ResponseEntity<ExceptionResponse> handleNotFoundException(IllegalAccessException ex, WebRequest request){
+    public ResponseEntity<ExceptionResponse> handleIllegalAccessException(IllegalAccessException ex, WebRequest request){
         ExceptionResponse errorResponse = ExceptionResponse.builder()
                 .status(HttpStatus.FORBIDDEN.value())
                 .message(ex.getMessage())
                 .build();
 
         return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(InsufficientStockException.class)
+    public ResponseEntity<ExceptionResponse> handleInsufficientStockException(InsufficientStockException ex, WebRequest request){
+        ExceptionResponse errorResponse = ExceptionResponse.builder()
+                .status(HttpStatus.BAD_REQUEST.value())
+                .message(ex.getMessage())
+                .build();
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(InvalidCredentialsException.class)
