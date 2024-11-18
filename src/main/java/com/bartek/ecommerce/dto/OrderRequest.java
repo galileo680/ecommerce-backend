@@ -1,17 +1,28 @@
 package com.bartek.ecommerce.dto;
 
-import com.bartek.ecommerce.entity.Payment;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-import java.math.BigDecimal;
-import java.util.List;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OrderRequest {
 
-    private BigDecimal totalPrice;
-    private List<OrderItemRequest> items;
-    private Payment paymentInfo;
+    @NotNull(message = "Shipping address is required")
+    @Valid
+    private AddressDto shippingAddress;
+
+    @NotNull(message = "Billing address is required")
+    @Valid
+    private AddressDto billingAddress;
+
+    @NotNull(message = "Payment details are required")
+    @Valid
+    private PaymentDetailsDto paymentDetails;
+
+    private String orderNotes;
+
+    private String couponCode;
 }
