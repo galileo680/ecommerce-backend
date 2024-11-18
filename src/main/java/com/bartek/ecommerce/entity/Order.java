@@ -24,9 +24,16 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "shipping_address_id")
+    private Address shippingAddress;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "billing_address_id")
+    private Address billingAddress;
+
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY,  cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems;
 
     private LocalDateTime orderDate;
-
 }
