@@ -1,6 +1,7 @@
 package com.bartek.ecommerce.entity;
 
 
+import com.bartek.ecommerce.enums.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -17,10 +18,12 @@ public class Payment {
     private Long id;
     private BigDecimal amount;
     private String method;
-    private String status;
+    private PaymentStatus status;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private  Order order;
-    @Column(name = "created_at")
-    private final LocalDateTime createdAt = LocalDateTime.now();
+
+    private String transactionId;
+
+    private LocalDateTime paymentDate;
 }
