@@ -6,9 +6,11 @@ import com.bartek.ecommerce.entity.OrderItem;
 import com.bartek.ecommerce.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+@Repository
 public interface OrderItemRepository extends JpaRepository<OrderItem, Long>, JpaSpecificationExecutor<OrderItem> {
-    Optional<CartItem> findByCartAndProduct(Cart cart, Product product);
+    //Optional<CartItem> findByCartAndProduct(Cart cart, Product product);
 }
