@@ -4,18 +4,23 @@ import com.bartek.ecommerce.dto.OrderItemDto;
 import com.bartek.ecommerce.entity.OrderItem;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+
 @Component
 public class OrderItemMapper {
 
-    /*public OrderItemDto toOrderItemDto(OrderItem orderItem) {
-        OrderItemDto orderItemDto = OrderItemDto.builder()
-                .id(orderItem.getId())
-                .quantity(orderItem.getQuantity())
-                .price(orderItem.getPrice())
-                .status(orderItem.getStatus().name())
-                .createdAt(orderItem.getCreatedAt())
-                .build();
+    public static OrderItemDto toOrderItemDto(OrderItem item) {
+        if (item == null) {
+            return null;
+        }
 
-        return orderItemDto;
-    }*/
+        OrderItemDto dto = new OrderItemDto();
+        dto.setProductId(item.getProduct().getId());
+        dto.setProductName(item.getProduct().getName());
+        dto.setQuantity(item.getQuantity());
+        dto.setUnitPrice(item.getUnitPrice());
+        //dto.setTotalPrice(item.getUnitPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
+
+        return dto;
+    }
 }
