@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+
 
 @Data
 @Builder
@@ -18,11 +18,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class OrderItemDto {
 
-    private Long id;
+    private Long productId;
+    private String productName;
     private int quantity;
-    private BigDecimal price;
-    private String  status;
-    private  UserDto user;
-    private ProductDto product;
-    private LocalDateTime createdAt;
+    private BigDecimal unitPrice;
 }
