@@ -5,7 +5,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -18,20 +18,19 @@ import java.util.Date;
 import java.util.function.Function;
 
 @Service
-@Slf4j
 public class JwtService {
 
-    @Value("${application.security.jwt.expiration}")
+    @Value("${security.jwt.expiration}")
     private long jwtExpiration;
 
-    @Value("${application.security.jwt.secret-key}")
-    private String secreteJwtString;
+    @Value("${security.jwt.secret-key}")
+    private String secretJwtString;
 
     private SecretKey key;
 
     @PostConstruct
     private void init(){
-        byte[] keyBytes = secreteJwtString.getBytes(StandardCharsets.UTF_8);
+        byte[] keyBytes = secretJwtString.getBytes(StandardCharsets.UTF_8);
         this.key = new SecretKeySpec(keyBytes, "HmacSHA256");
     }
 
@@ -42,9 +41,9 @@ public class JwtService {
 
     public String generateToken(String username){
         return Jwts.builder()
-                .subject(username)
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + jwtExpiration))
+                .setSubject(username)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .signWith(key)
                 .compact();
     }
@@ -53,8 +52,13 @@ public class JwtService {
         return extractClaims(token, Claims::getSubject);
     }
 
-    private <T> T extractClaims(String token, Function<Claims, T> claimsTFunction){
-        return claimsTFunction.apply(Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload());
+    private <T> T extractClaims(String token, Function<Claims, T> claimsResolver) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+        return claimsResolver.apply(claims);
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails){
