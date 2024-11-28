@@ -27,8 +27,6 @@ public class CartServiceImpl implements CartService {
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
 
-    private final CartMapper cartMapper;
-
     @Override
     public Cart getCartByUserId(Long userId) {
         User user = userRepository.findById(userId)
