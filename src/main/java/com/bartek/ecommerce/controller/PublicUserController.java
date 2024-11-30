@@ -1,11 +1,10 @@
 package com.bartek.ecommerce.controller;
 
-import com.bartek.ecommerce.dto.LoginRequest;
-import com.bartek.ecommerce.dto.LoginResponse;
-import com.bartek.ecommerce.dto.UserDto;
+import com.bartek.ecommerce.dto.*;
 import com.bartek.ecommerce.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,10 +19,10 @@ public class PublicUserController {
     private final UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<UserDto> registerUser(
-            @RequestBody @Valid UserDto registrationRequest
+    public ResponseEntity<Void> registerUser(
+            @RequestBody @Valid RegisterRequest registerRequest
     ) {
-        return ResponseEntity.ok(userService.registerUser(registrationRequest));
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> loginUser(

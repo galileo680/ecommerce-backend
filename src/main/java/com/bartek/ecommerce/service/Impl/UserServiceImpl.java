@@ -1,8 +1,6 @@
 package com.bartek.ecommerce.service.Impl;
 
-import com.bartek.ecommerce.dto.LoginRequest;
-import com.bartek.ecommerce.dto.LoginResponse;
-import com.bartek.ecommerce.dto.UserDto;
+import com.bartek.ecommerce.dto.*;
 import com.bartek.ecommerce.entity.User;
 import com.bartek.ecommerce.exception.InvalidCredentialsException;
 import com.bartek.ecommerce.exception.NotFoundException;
@@ -33,16 +31,16 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
 
     @Override
-    public UserDto registerUser(UserDto registrationRequest) {
+    public void registerUser(RegisterRequest registerRequest) {
         var userRole = roleRepository.findByName("USER")
                 .orElseThrow(() -> new IllegalStateException("ROLE USER was not initialized"));
 
         User user = User.builder()
-                .firstname(registrationRequest.getFirstname())
-                .lastname(registrationRequest.getLastname())
-                .email(registrationRequest.getEmail())
-                .password(passwordEncoder.encode(registrationRequest.getPassword()))
-                .phoneNumber(registrationRequest.getPhoneNumber())
+                .firstname(registerRequest.getFirstname())
+                .lastname(registerRequest.getLastname())
+                .email(registerRequest.getEmail())
+                .password(passwordEncoder.encode(registerRequest.getPassword()))
+                .phoneNumber(registerRequest.getPhoneNumber())
                 .roles(List.of(userRole))
                 .build();
 
@@ -50,9 +48,7 @@ public class UserServiceImpl implements UserService {
 
         log.info(savedUser.toString());
 
-        UserDto userDto = userMapper.toUserDto(savedUser);
-
-        return userDto;
+        //UserDto userDto = userMapper.toUserDto(savedUser);
     }
 
     @Override
