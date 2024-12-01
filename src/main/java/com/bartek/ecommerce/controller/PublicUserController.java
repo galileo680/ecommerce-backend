@@ -22,6 +22,7 @@ public class PublicUserController {
     public ResponseEntity<Void> registerUser(
             @RequestBody @Valid RegisterRequest registerRequest
     ) {
+        userService.registerUser(registerRequest);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
     @PostMapping("/login")
