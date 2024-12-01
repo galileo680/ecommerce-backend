@@ -32,6 +32,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void registerUser(RegisterRequest registerRequest) {
+        if(userRepository.findByEmail(registerRequest.getEmail()).isPresent()){
+            throw new IllegalArgumentException("Email is already in use");
+        }
+
         var userRole = roleRepository.findByName("USER")
                 .orElseThrow(() -> new IllegalStateException("ROLE USER was not initialized"));
 
