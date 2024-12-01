@@ -28,5 +28,7 @@ public class RegisterRequest {
     @NotBlank(message = "Password is required")
     private String password;
 
+    @NotBlank(message = "Phone number is required")
+    @Size(min = 9, max = 9,  message = "Wrong phone number")
     private String phoneNumber;
 }
