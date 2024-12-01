@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 import java.util.Map;
-import java.util.Set;
+
 
 @Getter
 @Setter
@@ -16,4 +16,5 @@ public class ExceptionResponse {
 
     private int status;
     private String message;
+    private Map<String, String> errors;
 }
