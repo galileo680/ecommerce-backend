@@ -2,6 +2,8 @@ package com.bartek.ecommerce.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,6 +20,10 @@ import java.util.List;
 public class CategoryDto {
 
     private Long id;
-    private String  name;
+
+    @NotBlank(message = "Category name is required")
+    @Size(min = 3, max = 15,  message = "Wrong name for a category")
+    private String name;
+
     private List<ProductDto> productList;
 }
