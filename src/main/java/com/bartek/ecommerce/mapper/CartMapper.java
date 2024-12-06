@@ -23,10 +23,12 @@ public class CartMapper {
         cartDto.setId(cart.getId());
         cartDto.setTotalAmount(cart.getTotalAmount());
 
-        List<CartItemDto> cartItemDTOs = cart.getCartItems().stream()
-                .map(CartMapper::toCartItemDto)
-                .collect(Collectors.toList());
-        cartDto.setCartItems(cartItemDTOs);
+        if (cart.getCartItems() != null) {
+            List<CartItemDto> cartItemDTOs = cart.getCartItems().stream()
+                    .map(CartMapper::toCartItemDto)
+                    .collect(Collectors.toList());
+            cartDto.setCartItems(cartItemDTOs);
+        }
 
         return cartDto;
     }
