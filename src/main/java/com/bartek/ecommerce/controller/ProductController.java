@@ -6,6 +6,7 @@ import com.bartek.ecommerce.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,7 @@ public class ProductController {
     }
 
     //Get by category id
-    @GetMapping("/{categoryId}")
+    @GetMapping("/category/{categoryId}")
     public ResponseEntity<List<ProductDto>> getProductsByCategory(
             @PathVariable Long categoryId
     ){
@@ -46,26 +47,25 @@ public class ProductController {
         return ResponseEntity.ok(productService.searchProduct(searchValue));
     }
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ProductDto> createProduct(
-            @RequestParam @Valid ProductDto productDto,
-            @RequestParam Long categoryId
+            @ModelAttribute @Valid ProductDto productDto
     ){
-        ProductDto productDtoCreated = productService.createProduct(productDto, categoryId);
+        ProductDto productDtoCreated = productService.createProduct(productDto);
         return new ResponseEntity<>(productDtoCreated, HttpStatus.CREATED);
     }
 
-    @PutMapping
+    @PutMapping("{productId}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ProductDto> updateProduct(
-            @RequestParam @Valid ProductDto productDto,
-            @RequestParam(required = false) Long categoryId
+            @ModelAttribute @Valid ProductDto productDto,
+            @PathVariable Long productId
     ){
-        return ResponseEntity.ok(productService.updateProduct(productDto, categoryId));
+        return ResponseEntity.ok(productService.updateProduct(productId, productDto));
     }
 
-    @DeleteMapping("/{productId}")
+    @DeleteMapping("{productId}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<HttpStatus> deleteProduct(
             @PathVariable Long productId
