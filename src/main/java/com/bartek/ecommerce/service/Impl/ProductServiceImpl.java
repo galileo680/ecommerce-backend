@@ -28,8 +28,12 @@ public class ProductServiceImpl implements ProductService {
     private final AwsS3Service awsS3Service;
 
     @Override
-    public ProductDto createProduct(ProductDto productDto, Long categoryId) {
-        Category category = categoryRepository.findById(categoryId)
+    public ProductDto createProduct(ProductDto productDto) {
+        if(productRepository.findByName(productDto.getName()).isPresent()){
+            throw new IllegalArgumentException("Provided product name is already in use");
+        }
+
+        Category category = categoryRepository.findById(productDto.getCategoryId())
                 .orElseThrow(()-> new NotFoundException("Category not found"));
 
         String productImageUrl = awsS3Service.saveImageToS3(productDto.getImageFile());
@@ -40,6 +44,7 @@ public class ProductServiceImpl implements ProductService {
         product.setName(productDto.getName());
         product.setDescription(productDto.getDescription());
         product.setImageUrl(productImageUrl);
+        product.setQuantity(productDto.getQuantity());
 
         productRepository.save(product);
 
@@ -49,15 +54,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDto updateProduct(ProductDto productDto, Long categoryId) {
-        Product product = productRepository.findById(productDto.getId())
+    public ProductDto updateProduct(Long productId, ProductDto productDto) {
+        Product product = productRepository.findById(productId)
                 .orElseThrow(()-> new NotFoundException("Product Not Found"));
 
         Category category = null;
         String productImageUrl = null;
 
-        if(categoryId != null ){
-            category = categoryRepository.findById(categoryId)
+        if(productDto.getCategoryId() != null ){
+            category = categoryRepository.findById(productDto.getCategoryId())
                     .orElseThrow(()-> new NotFoundException("Category not found"));
 
             product.setCategory(category);
