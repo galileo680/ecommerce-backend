@@ -102,6 +102,7 @@ public class CartServiceImpl implements CartService {
     public void clearCart(Long userId) {
         Cart cart = getCartByUserId(userId);
         cart.getCartItems().clear();
+        cart.setTotalAmount(BigDecimal.ZERO);
         cartRepository.save(cart);
     }
 
