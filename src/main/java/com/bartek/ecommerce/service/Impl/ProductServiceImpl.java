@@ -76,6 +76,7 @@ public class ProductServiceImpl implements ProductService {
         Optional.ofNullable(productDto.getName()).ifPresent(product::setName);
         Optional.ofNullable(productDto.getDescription()).ifPresent(product::setDescription);
         Optional.ofNullable(productDto.getPrice()).ifPresent(product::setPrice);
+        Optional.ofNullable(productDto.getQuantity()).ifPresent(product::setQuantity);
 
         productRepository.save(product);
 
