@@ -14,10 +14,6 @@ public class OrderRequest {
     @Valid
     private AddressDto shippingAddress;
 
-    @NotNull(message = "Billing address is required")
-    @Valid
-    private AddressDto billingAddress;
-
     @NotNull(message = "Payment details are required")
     @Valid
     private PaymentDetailsDto paymentDetails;

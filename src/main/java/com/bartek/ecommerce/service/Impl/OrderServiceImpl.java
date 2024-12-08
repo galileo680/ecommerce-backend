@@ -12,7 +12,7 @@ import com.bartek.ecommerce.repository.CartRepository;
 import com.bartek.ecommerce.repository.OrderRepository;
 import com.bartek.ecommerce.repository.ProductRepository;
 import com.bartek.ecommerce.repository.UserRepository;
-import com.bartek.ecommerce.service.AddressService;
+import com.bartek.ecommerce.service.CartService;
 import com.bartek.ecommerce.service.OrderService;
 import com.bartek.ecommerce.service.PaymentService;
 import lombok.RequiredArgsConstructor;
@@ -32,9 +32,9 @@ public class OrderServiceImpl implements OrderService {
     private final ProductRepository productRepository;
     private final CartRepository cartRepository;
 
-    private final AddressService addressService;
     private final PaymentService paymentService;
     private final OrderRepository orderRepository;
+    private final CartService cartService;
 
     @Override
     public OrderDto placeOrder(Long userId, OrderRequest orderRequest) {
@@ -59,8 +59,9 @@ public class OrderServiceImpl implements OrderService {
 
         orderRepository.save(order);
 
-        cart.getCartItems().clear();
-        cartRepository.save(cart);
+        //cart.getCartItems().clear();
+        //cartService.clearCart(userId);
+        //cartRepository.save(cart);
 
         //emailSerivce.sendOrderConfirmation(user, order);
 
@@ -103,10 +104,12 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(OrderStatus.PENDING);
         order.setTotalAmount(cart.getTotalAmount());
 
-        Address shippingAddress = addressService.createOrGetAddress(orderRequest.getShippingAddress(), user);
-        Address billingAddress = addressService.createOrGetAddress(orderRequest.getBillingAddress(), user);
-        order.setShippingAddress(shippingAddress);
-        order.setBillingAddress(billingAddress);
+        order.setShippingStreet(orderRequest.getShippingAddress().getStreet());
+        order.setShippingCity(orderRequest.getShippingAddress().getCity());
+        order.setShippingState(orderRequest.getShippingAddress().getState());
+        order.setShippingPostalCode(orderRequest.getShippingAddress().getPostalCode());
+        order.setShippingCountry(orderRequest.getShippingAddress().getCountry());
+
 
         for (CartItem cartItem : cart.getCartItems()) {
             OrderItem orderItem = new OrderItem();

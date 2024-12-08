@@ -22,7 +22,6 @@ public class OrderDto {
     private OrderStatus status;
     private BigDecimal totalAmount;
     private AddressDto shippingAddress;
-    private AddressDto billingAddress;
     private List<OrderItemDto> orderItems;
     //private PaymentDto payment;
 }
