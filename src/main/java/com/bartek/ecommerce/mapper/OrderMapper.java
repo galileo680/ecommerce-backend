@@ -1,5 +1,6 @@
 package com.bartek.ecommerce.mapper;
 
+import com.bartek.ecommerce.dto.AddressDto;
 import com.bartek.ecommerce.dto.OrderDto;
 import com.bartek.ecommerce.dto.OrderItemDto;
 import com.bartek.ecommerce.entity.Order;
@@ -21,13 +22,29 @@ public class OrderMapper {
         dto.setStatus(order.getStatus());
         dto.setTotalAmount(order.getTotalAmount());
 
-        dto.setShippingAddress(AddressMapper.toAddressDto(order.getShippingAddress()));
-        dto.setBillingAddress(AddressMapper.toAddressDto(order.getBillingAddress()));
 
-        List<OrderItemDto> orderItemDtos = order.getOrderItems().stream()
+        /*List<OrderItemDto> orderItemDtos = order.getOrderItems().stream()
                 .map(OrderItemMapper::toOrderItemDto)
                 .collect(Collectors.toList());
-        dto.setOrderItems(orderItemDtos);
+        dto.setOrderItems(orderItemDtos);*/
+
+        dto.setShippingAddress(
+                new AddressDto().builder()
+                        .street(order.getShippingStreet())
+                        .city(order.getShippingCity())
+                        .state(order.getShippingState())
+                        .postalCode(order.getShippingPostalCode())
+                        .country(order.getShippingCountry())
+                .build());
+
+        dto.setOrderItems(order.getOrderItems().stream()
+                .map(orderItem -> new OrderItemDto(
+                        orderItem.getProduct().getId(),
+                        orderItem.getProduct().getName(),
+                        orderItem.getQuantity(),
+                        orderItem.getUnitPrice()
+                ))
+                .collect(Collectors.toList()));
 
         //dto.setPayment(PaymentMapper.toPaymentDto(order.getPayment()));
 
