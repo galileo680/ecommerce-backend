@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirm Your Account</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        h1 { color: #333; }
+        .button {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px 20px;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+        .button:hover { background-color: #45a049; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Welcome, <span th:text="${name}">User</span>!</h1>
+    <p>Thank you for registering on our ecommerce website. Please click the button below to activate your account:</p>
+    <a class="button" th:href="${activationLink}">Activate Account</a>
+    <p>If the button doesn't work, copy and paste this link into your browser:</p>
+    <p><span th:text="${activationLink}">https://example.com/activate</span></p>
+</div>
+</body>
+</html>

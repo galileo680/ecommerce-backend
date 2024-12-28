@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Confirmation</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        h1 { color: #333; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            border-bottom: 2px solid #ddd;
+        }
+        .total {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Order Confirmation</h1>
+    <p>Hi <span th:text="${name}">Customer</span>, thank you for your order!</p>
+    <p>Order ID: <span th:text="${orderId}">12345</span></p>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${orderItems}">
+            <td th:text="${item.productName}">Product Name</td>
+            <td th:text="${item.quantity}">1</td>
+            <td th:text="${#numbers.formatDecimal(item.unitPrice * item.quantity, 2, 2)}">$0.00</td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td class="total" colspan="2">Total Amount:</td>
+            <td class="total" th:text="${totalAmount}">$199.98</td>
+        </tr>
+        </tfoot>
+    </table>
+
+    <p>Your order will be shipped to:</p>
+    <p>
+        <span th:text="${shippingAddress.street}">123 Main St</span><br/>
+        <span th:text="${shippingAddress.city}">Springfield</span>,
+        <span th:text="${shippingAddress.state}">IL</span><br/>
+        <span th:text="${shippingAddress.postalCode}">62704</span><br/>
+        <span th:text="${shippingAddress.country}">USA</span>
+    </p>
+
+    <p>Thank you for shopping with us!</p>
+</div>
+</body>
+</html>
