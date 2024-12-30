@@ -34,6 +34,7 @@ public class User implements UserDetails {
     private String password;
     @Column(name = "phone_number")
     private  String phoneNumber;
+    private boolean enabled;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles;
