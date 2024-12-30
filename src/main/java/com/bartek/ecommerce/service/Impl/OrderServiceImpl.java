@@ -1,6 +1,8 @@
 package com.bartek.ecommerce.service.Impl;
 
+import com.bartek.ecommerce.dto.AddressDto;
 import com.bartek.ecommerce.dto.OrderDto;
+import com.bartek.ecommerce.dto.OrderItemDto;
 import com.bartek.ecommerce.dto.OrderRequest;
 import com.bartek.ecommerce.entity.*;
 import com.bartek.ecommerce.enums.OrderStatus;
@@ -35,6 +37,7 @@ public class OrderServiceImpl implements OrderService {
     private final PaymentService paymentService;
     private final OrderRepository orderRepository;
     private final CartService cartService;
+    private final EmailService emailService;
 
     @Override
     public OrderDto placeOrder(Long userId, OrderRequest orderRequest) {
@@ -63,7 +66,26 @@ public class OrderServiceImpl implements OrderService {
         //cartService.clearCart(userId);
         //cartRepository.save(cart);
 
-        //emailSerivce.sendOrderConfirmation(user, order);
+        emailService.sendOrderConfirmationEmail(
+                user.getEmail(),
+                user.getFirstname(),
+                order.getId(),
+                order.getOrderItems().stream().map(item -> {
+                    OrderItemDto dto = new OrderItemDto();
+                    dto.setProductName(item.getProduct().getName());
+                    dto.setQuantity(item.getQuantity());
+                    dto.setUnitPrice(item.getUnitPrice());
+                    return dto;
+                }).collect(Collectors.toList()),
+                order.getTotalAmount(),
+                AddressDto.builder()
+                        .street(order.getShippingStreet())
+                        .city(order.getShippingCity())
+                        .state(order.getShippingState())
+                        .postalCode(order.getShippingPostalCode())
+                        .country(order.getShippingCountry())
+                        .build()
+        );
 
         return OrderMapper.toOrderDto(order);
     }
