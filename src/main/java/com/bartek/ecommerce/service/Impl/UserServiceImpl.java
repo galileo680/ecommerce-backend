@@ -108,6 +108,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(()-> new UsernameNotFoundException("User not found"));
     }
 
+    @Override
     public void activateAccount(String token) throws MessagingException {
         ActivationToken activationToken = activationTokenRepository.findByToken(token)
                 .orElseThrow(() -> new RuntimeException("Invalid token"));
