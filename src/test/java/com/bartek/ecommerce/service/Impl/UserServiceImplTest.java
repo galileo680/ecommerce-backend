@@ -64,7 +64,6 @@ class UserServiceImplTest {
     // ---------------------------------------------
     @Test
     void registerUser_Success_WhenUserIsNew() throws MessagingException {
-        // given
         when(userRepository.findByEmail(TEST_EMAIL))
                 .thenReturn(Optional.empty());
 
@@ -83,12 +82,10 @@ class UserServiceImplTest {
         when(userRepository.save(any(User.class))).thenReturn(savedUser);
         doNothing().when(emailService).sendAccountActivationEmail(anyString(), anyString(), anyString());
 
-        // when
         userService.registerUser(
                 new RegisterRequest("Bob", "Newman", TEST_EMAIL, TEST_PASSWORD, "123456789")
         );
 
-        // then
         verify(userRepository, times(1)).save(any(User.class));
         verify(emailService, times(1)).sendAccountActivationEmail(eq(TEST_EMAIL), eq("Bob"), anyString());
 
@@ -96,11 +93,9 @@ class UserServiceImplTest {
 
     @Test
     void registerUser_ThrowsException_WhenEmailAlreadyExists() throws MessagingException {
-        // given
         when(userRepository.findByEmail(TEST_EMAIL))
                 .thenReturn(Optional.of(new User()));
 
-        // when + then
         assertThrows(IllegalArgumentException.class, () -> {
             userService.registerUser(
                     new RegisterRequest("Bob", "Newman", TEST_EMAIL, TEST_PASSWORD, "123456789")
@@ -113,13 +108,11 @@ class UserServiceImplTest {
 
     @Test
     void registerUser_ThrowsException_WhenRoleNotInitialized() throws MessagingException {
-        // given
         when(userRepository.findByEmail(TEST_EMAIL))
                 .thenReturn(Optional.empty());
         when(roleRepository.findByName("USER"))
                 .thenReturn(Optional.empty());
 
-        // when + then
         assertThrows(IllegalStateException.class, () -> {
             userService.registerUser(
                     new RegisterRequest("Bob", "Newman", TEST_EMAIL, TEST_PASSWORD, "123456789")
@@ -129,12 +122,8 @@ class UserServiceImplTest {
         verify(userRepository, never()).save(any(User.class));
     }
 
-    // ---------------------------------------------
-    // TESTS FOR loginUser
-    // ---------------------------------------------
     @Test
     void loginUser_Success() {
-        // given
         LoginRequest loginRequest = new LoginRequest(TEST_EMAIL, TEST_PASSWORD);
 
         User user = new User();
@@ -145,28 +134,23 @@ class UserServiceImplTest {
         when(passwordEncoder.matches(TEST_PASSWORD, "encodedPassword")).thenReturn(true);
         when(jwtService.generateToken(user)).thenReturn("mocked_jwt_token");
 
-        // when
         var response = userService.loginUser(loginRequest);
 
-        // then
         assertNotNull(response);
         assertEquals("mocked_jwt_token", response.getToken());
     }
 
     @Test
     void loginUser_ThrowsNotFound_WhenEmailDoesNotExist() {
-        // given
         LoginRequest loginRequest = new LoginRequest(TEST_EMAIL, TEST_PASSWORD);
         when(userRepository.findByEmail(TEST_EMAIL)).thenReturn(Optional.empty());
 
-        // when + then
         assertThrows(NotFoundException.class, () -> userService.loginUser(loginRequest));
         verify(passwordEncoder, never()).matches(anyString(), anyString());
     }
 
     @Test
     void loginUser_ThrowsInvalidCredentials_WhenPasswordMismatch() {
-        // given
         LoginRequest loginRequest = new LoginRequest(TEST_EMAIL, TEST_PASSWORD);
 
         User user = new User();
@@ -176,17 +160,12 @@ class UserServiceImplTest {
         when(userRepository.findByEmail(TEST_EMAIL)).thenReturn(Optional.of(user));
         when(passwordEncoder.matches(TEST_PASSWORD, "encodedPassword")).thenReturn(false);
 
-        // when + then
         assertThrows(InvalidCredentialsException.class, () -> userService.loginUser(loginRequest));
         verify(jwtService, never()).generateToken(any(User.class));
     }
 
-    // ---------------------------------------------
-    // TESTS FOR getAllUsers
-    // ---------------------------------------------
     @Test
     void getAllUsers_ReturnsListOfUserDtos() {
-        // given
         User user1 = new User();
         user1.setId(1L);
         user1.setEmail("user1@test.com");
@@ -206,58 +185,45 @@ class UserServiceImplTest {
         when(userMapper.toUserDto(user1)).thenReturn(userDto1);
         when(userMapper.toUserDto(user2)).thenReturn(userDto2);
 
-        // when
         var result = userService.getAllUsers();
 
-        // then
         assertEquals(2, result.size());
         assertEquals("user1@test.com", result.get(0).getEmail());
         assertEquals("user2@test.com", result.get(1).getEmail());
     }
 
-    // ---------------------------------------------
-    // TESTS FOR getCurrentUser
-    // ---------------------------------------------
+
     @Test
     void getCurrentUser_Success() {
-        // given
         User user = new User();
         user.setId(1L);
         user.setEmail(TEST_EMAIL);
 
-        // Mock SecurityContextHolder
         when(authentication.getName()).thenReturn(TEST_EMAIL);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         when(userRepository.findByEmail(TEST_EMAIL)).thenReturn(Optional.of(user));
 
-        // when
         var currentUser = userService.getCurrentUser();
 
-        // then
         assertNotNull(currentUser);
         assertEquals(TEST_EMAIL, currentUser.getEmail());
     }
 
     @Test
     void getCurrentUser_ThrowsUsernameNotFound() {
-        // given
         when(authentication.getName()).thenReturn(TEST_EMAIL);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         when(userRepository.findByEmail(TEST_EMAIL)).thenReturn(Optional.empty());
 
-        // when + then
         assertThrows(UsernameNotFoundException.class,
                 () -> userService.getCurrentUser());
     }
 
-    // ---------------------------------------------
-    // TESTS FOR activateAccount
-    // ---------------------------------------------
+
     @Test
     void activateAccount_Success() throws MessagingException {
-        // given
         String tokenValue = "ValidToken";
         ActivationToken activationToken = new ActivationToken();
         activationToken.setToken(tokenValue);
@@ -272,10 +238,8 @@ class UserServiceImplTest {
 
         when(userRepository.findById(10L)).thenReturn(Optional.of(user));
 
-        // when
         userService.activateAccount(tokenValue);
 
-        // then
         assertTrue(user.isEnabled());
         verify(userRepository, times(1)).save(user);
         verify(activationTokenRepository, times(1)).save(activationToken);
@@ -283,12 +247,10 @@ class UserServiceImplTest {
 
     @Test
     void activateAccount_ThrowsRuntime_WhenTokenNotFound() {
-        // given
         String tokenValue = "nonExistingToken";
         when(activationTokenRepository.findByToken(tokenValue))
                 .thenReturn(Optional.empty());
 
-        // when + then
         assertThrows(RuntimeException.class,
                 () -> userService.activateAccount(tokenValue));
     }
