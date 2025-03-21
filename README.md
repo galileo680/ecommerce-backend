@@ -14,7 +14,9 @@
 ## Overview
 
 This **Spring Boot** project is a backend part for a full-stack e-commerce application.
-
+<br />
+<br />
+**Frontend part:** https://github.com/galileo680/ecommerce-frontend
 ---
 
 ## Features
