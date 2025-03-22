@@ -14,7 +14,9 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class JwtService {
@@ -35,12 +37,17 @@ public class JwtService {
 
     public String generateToken(User user){
         String username = user.getEmail();
-        return generateToken(username);
+        List<String> roleNames = user.getRoles().stream()
+                .map(role -> role.getName())
+                .collect(Collectors.toList());
+
+        return generateToken(username, roleNames);
     }
 
-    public String generateToken(String username){
+    public String generateToken(String username, List<String> roleNames){
         return Jwts.builder()
                 .setSubject(username)
+                .claim("roles", roleNames)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .signWith(key)
