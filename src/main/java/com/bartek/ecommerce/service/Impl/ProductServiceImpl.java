@@ -44,6 +44,7 @@ public class ProductServiceImpl implements ProductService {
         product.setName(productDto.getName());
         product.setDescription(productDto.getDescription());
         product.setImageUrl(productImageUrl);
+        product.setImageFileName(productDto.getImageFile().getOriginalFilename());
         product.setQuantity(productDto.getQuantity());
 
         productRepository.save(product);
@@ -78,6 +79,8 @@ public class ProductServiceImpl implements ProductService {
         Optional.ofNullable(productDto.getPrice()).ifPresent(product::setPrice);
         Optional.ofNullable(productDto.getQuantity()).ifPresent(product::setQuantity);
 
+
+        //TODO: mapping saved product
         productRepository.save(product);
 
         ProductDto productDtoMapped = productMapper.toProductDto(product);
