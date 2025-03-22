@@ -43,6 +43,8 @@ public class ProductDto {
     @NotNull(message = "Product image is required")
     private MultipartFile imageFile;
 
+    private byte[] retrievedImage;
+
     @NotNull(message = "Category ID is required")
     private Long categoryId;
 }
