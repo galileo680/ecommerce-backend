@@ -60,6 +60,7 @@ public class UserServiceImpl implements UserService {
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .phoneNumber(registerRequest.getPhoneNumber())
                 .roles(List.of(userRole))
+                .created_at(LocalDateTime.now())
                 .build();
 
         User savedUser = userRepository.save(user);
@@ -79,6 +80,8 @@ public class UserServiceImpl implements UserService {
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())){
             throw new InvalidCredentialsException("Password does not match");
         }
+
+        //To do: check if account is activated via email
 
         String token = jwtService.generateToken(user);
 
