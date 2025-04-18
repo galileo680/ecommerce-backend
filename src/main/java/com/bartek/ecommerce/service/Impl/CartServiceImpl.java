@@ -14,6 +14,8 @@ import com.bartek.ecommerce.repository.ProductRepository;
 import com.bartek.ecommerce.repository.UserRepository;
 import com.bartek.ecommerce.service.CartService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -28,6 +30,7 @@ public class CartServiceImpl implements CartService {
     private final UserRepository userRepository;
 
     @Override
+    @Cacheable(value = "cartCache", key = "#userId")
     public Cart getCartByUserId(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User not found"));
@@ -39,6 +42,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    @CacheEvict(value = "cartCache", key = "#userId")
     public CartDto addItemToCart(Long userId, Long productId, Integer quantity) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User not found"));
@@ -69,6 +73,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    @CacheEvict(value = "cartCache", key = "#userId")
     public CartDto updateCartItem(Long userId, Long cartItemId, int quantity) {
         CartItem cartItem = cartItemRepository.findById(cartItemId)
                 .orElseThrow(() -> new NotFoundException("Cart item not found"));
@@ -86,6 +91,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    @CacheEvict(value = "cartCache", key = "#userId")
     public void removeItemFromCart(Long userId, Long cartItemId) {
         CartItem cartItem = cartItemRepository.findById(cartItemId)
                 .orElseThrow(() -> new NotFoundException("Cart item not found"));
@@ -99,6 +105,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    @CacheEvict(value = "cartCache", key = "#userId")
     public void clearCart(Long userId) {
         Cart cart = getCartByUserId(userId);
         cart.getCartItems().clear();

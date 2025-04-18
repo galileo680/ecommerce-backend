@@ -10,6 +10,9 @@ import com.bartek.ecommerce.repository.ProductRepository;
 import com.bartek.ecommerce.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +31,7 @@ public class ProductServiceImpl implements ProductService {
     private final AwsS3Service awsS3Service;
 
     @Override
+    @CacheEvict(value = "productCache", allEntries = true)
     public ProductDto createProduct(ProductDto productDto) {
         if(productRepository.findByName(productDto.getName()).isPresent()){
             throw new IllegalArgumentException("Provided product name is already in use");
@@ -55,6 +59,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @CachePut(value = "productCache", key = "#productId")
     public ProductDto updateProduct(Long productId, ProductDto productDto) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(()-> new NotFoundException("Product Not Found"));
@@ -89,6 +94,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Cacheable(value = "productCache", key = "#productId")
     public ProductDto getProductById(Long productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(()-> new NotFoundException("Product Not Found"));
@@ -99,6 +105,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Cacheable(value = "productCache", key = "'allProducts'")
     public List<ProductDto> getAllProducts() {
         List<ProductDto> productList = productRepository.findAll(Sort.by(Sort.Direction.DESC, "id"))
                 .stream()
@@ -109,6 +116,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Cacheable(value = "productCache", key = "'category_' + #categoryId")
     public List<ProductDto> getProductsByCategory(Long categoryId) {
         List<Product> products = productRepository.findByCategoryId(categoryId);
 
@@ -139,6 +147,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @CacheEvict(value = "productCache", key = "#productId")
     public void deleteProduct(Long productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(()-> new NotFoundException("Product Not Found"));

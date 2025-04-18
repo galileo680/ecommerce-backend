@@ -8,6 +8,8 @@ import com.bartek.ecommerce.repository.CategoryRepository;
 import com.bartek.ecommerce.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +25,7 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryMapper categoryMapper;
 
     @Override
+    @CacheEvict(value = "categoryCache", allEntries = true)
     public CategoryDto createCategory(CategoryDto categoryRequest) {
         Category category = new Category();
         category.setName(categoryRequest.getName());
@@ -34,6 +37,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @CacheEvict(value = "categoryCache", key = "#categoryId")
     public CategoryDto updateCategory(Long categoryId, CategoryDto categoryRequest) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(()-> new NotFoundException("Category Not Found"));
@@ -46,6 +50,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Cacheable(value = "categoryCache", key = "'allCategories'")
     public List<CategoryDto> getAllCategories() {
         List<Category> categories = categoryRepository.findAll();
         List<CategoryDto> categoryDtoList = categories.stream()
@@ -56,6 +61,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Cacheable(value = "categoryCache", key = "#categoryId")
     public CategoryDto getCategoryById(Long categoryId) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(()-> new NotFoundException("Category not Found"));
@@ -65,6 +71,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @CacheEvict(value = "categoryCache", allEntries = true)
     public void deleteCategory(Long categoryId) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(()-> new NotFoundException("Category not Found"));
