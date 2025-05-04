@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -48,4 +49,8 @@ public class ProductDto implements Serializable {
 
     @NotNull(message = "Category ID is required")
     private Long categoryId;
+
+    private boolean archived;
+
+    private LocalDateTime archivedAt;
 }

@@ -21,6 +21,10 @@ public class Product {
     private String imageFileName;
     private BigDecimal price;
     private Integer quantity;
+    private boolean archived = false;
+
+    @Column(name = "archived_at")
+    private LocalDateTime archivedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
