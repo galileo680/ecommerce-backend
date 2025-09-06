@@ -10,7 +10,11 @@ public interface ProductService {
     ProductDto updateProduct(Long productId, ProductDto productDto);
     ProductDto getProductById(Long productId);
     List<ProductDto> getAllProducts();
+    List<ProductDto> getAllProductsForAdmin();
     List<ProductDto> getProductsByCategory(Long categoryId);
+    List<ProductDto> getArchivedProducts();
     List<ProductDto> searchProduct(String searchValue);
-    void deleteProduct(Long productId);
+    void archiveProduct(Long productId);
+    //void deleteProduct(Long productId);
+    void restoreProduct(Long productId);
 }
