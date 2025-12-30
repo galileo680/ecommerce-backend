@@ -1,0 +1,18 @@
+server:
+  port: ${SERVER_PORT}
+
+spring:
+  application:
+    name: product_service
+
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+
