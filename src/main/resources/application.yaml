@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: ecommerce
+  docker:
+    compose:
+      file: docker/compose.yaml
