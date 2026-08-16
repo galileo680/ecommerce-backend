@@ -1,0 +1,7 @@
+spring:
+  docker:
+    compose:
+      file: docker/compose.yaml
+logging:
+  level:
+    com.galileo.ecommerce: debug
