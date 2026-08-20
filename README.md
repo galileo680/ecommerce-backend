@@ -20,9 +20,11 @@ flowchart TB
     Client["HTTP client"]
 
     subgraph App["Spring Boot application"]
+        direction TB
         API["REST API /api/v1"]
 
-        subgraph Storefront["Storefront modules"]
+        subgraph Storefront["storefront"]
+            direction LR
             Catalog["catalog"]
             Search["search"]
             Cart["cart"]
@@ -30,15 +32,16 @@ flowchart TB
             User["user"]
         end
 
-        subgraph Fulfilment["Order processing modules"]
+        subgraph Fulfilment["order processing"]
+            direction LR
             Ordering["ordering"]
             Inventory["inventory"]
             Payment["payment"]
             Shipping["shipping"]
         end
 
-        Notification["notification"]
         Registry["event publication registry"]
+        Notification["notification"]
         Common["common: Money, Address, shared errors"]
     end
 
@@ -47,19 +50,22 @@ flowchart TB
     Client --> API
     API --> Storefront
     API --> Fulfilment
-
     Cart -. facade call .-> Catalog
     Cart -. facade call .-> Pricing
     Ordering -. domain event .-> Registry
-
     Registry -. delivers .-> Inventory
     Registry -. delivers .-> Payment
     Registry -. delivers .-> Shipping
     Registry -. delivers .-> Notification
-
     Storefront --> Database
     Fulfilment --> Database
     Registry --> Database
+
+    style App fill:transparent,stroke:#8a8a8a,stroke-dasharray:6 4
+    style Storefront fill:transparent,stroke:#4a90d9
+    style Fulfilment fill:transparent,stroke:#d98e4a
+    style Registry fill:transparent,stroke:#5cb85c
+    style Common fill:transparent,stroke-dasharray:3 3
 ```
 
 Every domain module is a direct subpackage of `com.galileo.ecommerce` and has the same
