@@ -2,6 +2,8 @@ spring:
   docker:
     compose:
       file: docker/compose.yaml
+  flyway:
+    locations: classpath:db/migration,classpath:db/seed-local
 logging:
   level:
     com.galileo.ecommerce: debug
