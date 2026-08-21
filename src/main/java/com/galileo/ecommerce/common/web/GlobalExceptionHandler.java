@@ -3,11 +3,7 @@ package com.galileo.ecommerce.common.web;
 import com.galileo.ecommerce.common.domain.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ProblemDetail;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,7 +22,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-            HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+                                                                  HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(status, "Request validation failed");
         problem.setTitle("Validation Failed");
         problem.setInstance(URI.create(((ServletWebRequest) request).getRequest().getRequestURI()));
@@ -54,7 +50,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         }
         log.error("Unhandled exception for {} {}", request.getMethod(), request.getRequestURI(), ex);
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR,
-                "An unexpected error occurred");
+            "An unexpected error occurred");
         problem.setTitle("Internal Server Error");
         problem.setInstance(URI.create(request.getRequestURI()));
         return problem;
