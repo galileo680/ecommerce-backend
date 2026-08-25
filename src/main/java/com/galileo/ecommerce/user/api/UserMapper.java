@@ -1,8 +1,8 @@
 package com.galileo.ecommerce.user.api;
 
-import com.galileo.ecommerce.user.api.UserDtos.AddressRequest;
-import com.galileo.ecommerce.user.api.UserDtos.AddressResponse;
-import com.galileo.ecommerce.user.api.UserDtos.ProfileResponse;
+import com.galileo.ecommerce.user.api.dto.AddressRequest;
+import com.galileo.ecommerce.user.api.dto.AddressResponse;
+import com.galileo.ecommerce.user.api.dto.ProfileResponse;
 import com.galileo.ecommerce.user.application.AddressData;
 import com.galileo.ecommerce.user.domain.Address;
 import com.galileo.ecommerce.user.domain.User;

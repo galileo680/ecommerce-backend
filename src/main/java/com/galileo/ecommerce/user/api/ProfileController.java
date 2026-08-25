@@ -1,10 +1,10 @@
 package com.galileo.ecommerce.user.api;
 
-import com.galileo.ecommerce.user.api.UserDtos.AddressListResponse;
-import com.galileo.ecommerce.user.api.UserDtos.AddressRequest;
-import com.galileo.ecommerce.user.api.UserDtos.IdResponse;
-import com.galileo.ecommerce.user.api.UserDtos.ProfileResponse;
-import com.galileo.ecommerce.user.api.UserDtos.UpdateProfileRequest;
+import com.galileo.ecommerce.user.api.dto.AddressListResponse;
+import com.galileo.ecommerce.user.api.dto.AddressRequest;
+import com.galileo.ecommerce.user.api.dto.IdResponse;
+import com.galileo.ecommerce.user.api.dto.ProfileResponse;
+import com.galileo.ecommerce.user.api.dto.UpdateProfileRequest;
 import com.galileo.ecommerce.user.application.ProfileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

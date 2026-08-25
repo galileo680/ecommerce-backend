@@ -1,10 +1,10 @@
 package com.galileo.ecommerce.user.api;
 
-import com.galileo.ecommerce.user.api.UserDtos.IdResponse;
-import com.galileo.ecommerce.user.api.UserDtos.LoginRequest;
-import com.galileo.ecommerce.user.api.UserDtos.RefreshRequest;
-import com.galileo.ecommerce.user.api.UserDtos.RegisterRequest;
-import com.galileo.ecommerce.user.api.UserDtos.TokenResponse;
+import com.galileo.ecommerce.user.api.dto.IdResponse;
+import com.galileo.ecommerce.user.api.dto.LoginRequest;
+import com.galileo.ecommerce.user.api.dto.RefreshRequest;
+import com.galileo.ecommerce.user.api.dto.RegisterRequest;
+import com.galileo.ecommerce.user.api.dto.TokenResponse;
 import com.galileo.ecommerce.user.application.AuthService;
 import com.galileo.ecommerce.user.application.TokenPair;
 import io.swagger.v3.oas.annotations.Operation;
