@@ -1,11 +1,13 @@
 package com.galileo.ecommerce.common.web;
 
 import com.galileo.ecommerce.common.domain.BusinessRuleException;
+import com.galileo.ecommerce.common.domain.RateLimitExceededException;
 import com.galileo.ecommerce.common.domain.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -48,6 +50,22 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     ProblemDetail handleBusinessRule(BusinessRuleException ex, HttpServletRequest request) {
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
         problem.setTitle("Business Rule Violation");
+        problem.setInstance(URI.create(request.getRequestURI()));
+        return problem;
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    ProblemDetail handleBadCredentials(BadCredentialsException ex, HttpServletRequest request) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, "Invalid credentials");
+        problem.setTitle("Authentication Failed");
+        problem.setInstance(URI.create(request.getRequestURI()));
+        return problem;
+    }
+
+    @ExceptionHandler(RateLimitExceededException.class)
+    ProblemDetail handleRateLimit(RateLimitExceededException ex, HttpServletRequest request) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.TOO_MANY_REQUESTS, ex.getMessage());
+        problem.setTitle("Too Many Requests");
         problem.setInstance(URI.create(request.getRequestURI()));
         return problem;
     }

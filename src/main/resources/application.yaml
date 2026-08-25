@@ -12,3 +12,8 @@ management:
     web:
       exposure:
         include: health,info
+app:
+  security:
+    jwt:
+      access-ttl: 15m
+      refresh-ttl: 14d
