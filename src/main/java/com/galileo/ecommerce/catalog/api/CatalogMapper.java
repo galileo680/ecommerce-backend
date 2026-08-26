@@ -1,9 +1,10 @@
 package com.galileo.ecommerce.catalog.api;
 
-import com.galileo.ecommerce.catalog.api.CategoryDtos.CategoryResponse;
-import com.galileo.ecommerce.catalog.api.ProductDtos.CreateProductRequest;
-import com.galileo.ecommerce.catalog.api.ProductDtos.ProductResponse;
-import com.galileo.ecommerce.catalog.api.ProductDtos.UpdateProductRequest;
+import com.galileo.ecommerce.catalog.api.dto.CategoryResponse;
+import com.galileo.ecommerce.catalog.api.dto.CreateProductRequest;
+import com.galileo.ecommerce.catalog.api.dto.MoneyDto;
+import com.galileo.ecommerce.catalog.api.dto.ProductResponse;
+import com.galileo.ecommerce.catalog.api.dto.UpdateProductRequest;
 import com.galileo.ecommerce.catalog.application.CategoryNode;
 import com.galileo.ecommerce.catalog.application.ProductCommands.CreateProduct;
 import com.galileo.ecommerce.catalog.application.ProductCommands.UpdateProduct;

@@ -1,8 +1,8 @@
 package com.galileo.ecommerce.catalog.api;
 
-import com.galileo.ecommerce.catalog.api.CategoryDtos.CreateCategoryRequest;
-import com.galileo.ecommerce.catalog.api.CategoryDtos.UpdateCategoryRequest;
-import com.galileo.ecommerce.catalog.api.ProductDtos.IdResponse;
+import com.galileo.ecommerce.catalog.api.dto.CreateCategoryRequest;
+import com.galileo.ecommerce.catalog.api.dto.UpdateCategoryRequest;
+import com.galileo.ecommerce.catalog.api.dto.IdResponse;
 import com.galileo.ecommerce.catalog.application.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

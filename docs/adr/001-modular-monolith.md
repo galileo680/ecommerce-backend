@@ -10,7 +10,7 @@ shipping, search, and notifications.
 
 ## Decision
 
-We build a modular monolith on Spring Boot and Spring Modulith.
+Build a modular monolith on Spring Boot and Spring Modulith.
 
 * Every domain module is a direct subpackage of the application package.
 * A module exposes a small facade and its events. Everything else in the module is

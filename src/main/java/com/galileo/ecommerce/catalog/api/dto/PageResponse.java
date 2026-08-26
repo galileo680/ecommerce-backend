@@ -1,4 +1,4 @@
-package com.galileo.ecommerce.catalog.api;
+package com.galileo.ecommerce.catalog.api.dto;
 
 import org.springframework.data.domain.Page;
 

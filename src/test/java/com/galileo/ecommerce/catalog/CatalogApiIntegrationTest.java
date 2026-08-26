@@ -3,13 +3,18 @@ package com.galileo.ecommerce.catalog;
 import com.galileo.ecommerce.TestcontainersConfiguration;
 import com.galileo.ecommerce.catalog.domain.ProductStatus;
 import com.galileo.ecommerce.catalog.infrastructure.ProductRepository;
+import com.galileo.ecommerce.user.domain.User;
+import com.galileo.ecommerce.user.infrastructure.JwtTokenService;
+import com.galileo.ecommerce.user.infrastructure.UserRepository;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -38,6 +43,25 @@ class CatalogApiIntegrationTest {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JwtTokenService jwtTokenService;
+
+    private String adminToken;
+
+    @BeforeEach
+    void obtainAdminToken() {
+        User admin = userRepository.findByEmail("catalog-admin@test.local")
+            .orElseGet(() -> userRepository.save(User.registerAdmin("catalog-admin@test.local",
+                passwordEncoder.encode("AdminPass1"), "Test", "Admin")));
+        adminToken = jwtTokenService.issueAccessToken(admin);
+    }
+
     @Test
     void productLifecycleFromDraftToArchive() throws Exception {
         String categoryId = createCategory("Lifecycle %s".formatted(UUID.randomUUID()), null);
@@ -47,7 +71,8 @@ class CatalogApiIntegrationTest {
             .andExpect(status().isNotFound())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON));
 
-        mockMvc.perform(post("/api/v1/admin/products/{id}/activate", productId))
+        mockMvc.perform(post("/api/v1/admin/products/{id}/activate", productId)
+                .header("Authorization", "Bearer " + adminToken))
             .andExpect(status().isNoContent());
 
         mockMvc.perform(get("/api/v1/products/{id}", productId))
@@ -58,13 +83,15 @@ class CatalogApiIntegrationTest {
             .andExpect(jsonPath("$.status").value("ACTIVE"));
 
         mockMvc.perform(put("/api/v1/admin/products/{id}", productId)
+                .header("Authorization", "Bearer " + adminToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                     {"name": "Renamed product", "price": {"amount": 5100.00, "currency": "PLN"},
                      "categoryId": "%s", "attributes": {}}""".formatted(categoryId)))
             .andExpect(status().isNoContent());
 
-        mockMvc.perform(delete("/api/v1/admin/products/{id}", productId))
+        mockMvc.perform(delete("/api/v1/admin/products/{id}", productId)
+                .header("Authorization", "Bearer " + adminToken))
             .andExpect(status().isNoContent());
 
         mockMvc.perform(get("/api/v1/products/{id}", productId))
@@ -80,6 +107,7 @@ class CatalogApiIntegrationTest {
     @Test
     void invalidProductReturnsProblemJsonWithFieldErrors() throws Exception {
         mockMvc.perform(post("/api/v1/admin/products")
+                .header("Authorization", "Bearer " + adminToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                     {"sku": "x", "name": "", "price": {"amount": -5, "currency": "zl"}}"""))
@@ -98,6 +126,7 @@ class CatalogApiIntegrationTest {
         createProduct(sku, "First", "10.00", categoryId);
 
         mockMvc.perform(post("/api/v1/admin/products")
+                .header("Authorization", "Bearer " + adminToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(productJson(sku, "Second", "10.00", categoryId)))
             .andExpect(status().isConflict())
@@ -144,15 +173,18 @@ class CatalogApiIntegrationTest {
             .andReturn();
         assertThat(tree.getResponse().getContentAsString()).contains(parentName);
 
-        mockMvc.perform(delete("/api/v1/admin/categories/{id}", parentId))
+        mockMvc.perform(delete("/api/v1/admin/categories/{id}", parentId)
+                .header("Authorization", "Bearer " + adminToken))
             .andExpect(status().isConflict());
-        mockMvc.perform(delete("/api/v1/admin/categories/{id}", childId))
+        mockMvc.perform(delete("/api/v1/admin/categories/{id}", childId)
+                .header("Authorization", "Bearer " + adminToken))
             .andExpect(status().isConflict());
     }
 
     private String createCategory(String name, String parentId) throws Exception {
         String parent = parentId == null ? "null" : "\"%s\"".formatted(parentId);
         MvcResult result = mockMvc.perform(post("/api/v1/admin/categories")
+                .header("Authorization", "Bearer " + adminToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                     {"name": "%s", "parentId": %s}""".formatted(name, parent)))
@@ -163,6 +195,7 @@ class CatalogApiIntegrationTest {
 
     private String createProduct(String sku, String name, String amount, String categoryId) throws Exception {
         MvcResult result = mockMvc.perform(post("/api/v1/admin/products")
+                .header("Authorization", "Bearer " + adminToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(productJson(sku, name, amount, categoryId)))
             .andExpect(status().isCreated())
@@ -179,7 +212,8 @@ class CatalogApiIntegrationTest {
     }
 
     private void activate(String location) throws Exception {
-        mockMvc.perform(post("/api/v1/admin/products/{id}/activate", idFrom(location)))
+        mockMvc.perform(post("/api/v1/admin/products/{id}/activate", idFrom(location))
+                .header("Authorization", "Bearer " + adminToken))
             .andExpect(status().isNoContent());
     }
 

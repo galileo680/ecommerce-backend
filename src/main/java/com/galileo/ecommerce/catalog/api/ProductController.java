@@ -1,6 +1,7 @@
 package com.galileo.ecommerce.catalog.api;
 
-import com.galileo.ecommerce.catalog.api.ProductDtos.ProductResponse;
+import com.galileo.ecommerce.catalog.api.dto.ProductResponse;
+import com.galileo.ecommerce.catalog.api.dto.PageResponse;
 import com.galileo.ecommerce.catalog.application.ProductQueryService;
 import com.galileo.ecommerce.catalog.application.ProductSearchCriteria;
 import io.swagger.v3.oas.annotations.Operation;

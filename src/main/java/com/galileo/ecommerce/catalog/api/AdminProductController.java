@@ -1,7 +1,7 @@
 package com.galileo.ecommerce.catalog.api;
 
-import com.galileo.ecommerce.catalog.api.ProductDtos.CreateProductRequest;
-import com.galileo.ecommerce.catalog.api.ProductDtos.UpdateProductRequest;
+import com.galileo.ecommerce.catalog.api.dto.CreateProductRequest;
+import com.galileo.ecommerce.catalog.api.dto.UpdateProductRequest;
 import com.galileo.ecommerce.catalog.application.ProductAdminService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
